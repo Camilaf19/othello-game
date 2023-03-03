@@ -1,29 +1,53 @@
-#root {
-  height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+:root {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: black;
 }
 
-
-.game {
-  height: 35em;
-  width: 35em;
-  display: table;
-  margin: auto;
+body {
+  margin: 0px;
+  height: 100%;
+}
+.header-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 8em;
+  font-family: 'Righteous', cursive;
+  font-size: 1.8em;
+}
+.app-main {
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+}
+.board {
+  height: 33em;
+  width: 33em;
+  margin: 0em 4em;
+  border: solid rgb(255, 255, 255) 1px;
+  border-radius: 4px;
+  box-shadow: -1px 1px 20px -5px rgba(255, 255, 255, 0.555);
 }
 
-.row {
+.rows {
   display: flex;
 }
-.col {
+.cols {
   width: 4em;
   height: 4em;
-  border: solid black 1px;
+  border: solid rgba(255, 255, 255, 0.733) 1px;
+  /*  border-radius: 2px; */
+  background-color: #008000;
 }
 
 .token-none {
   display: flex;
   height: 3.5em;
   width: 3.5em;
-  border-radius: 50%;
   margin: auto;
 }
 
@@ -34,6 +58,7 @@
   border-radius: 50%;
   margin: auto;
   background-color: black;
+   border: solid rgba(255, 255, 255, 0.329) 1px;
 }
 
 .token-white {
@@ -43,15 +68,24 @@
   border-radius: 50%;
   margin: auto;
   background-color: white;
-   border: solid black 1px;
 }
 
 .token-selected {
   display: flex;
   height: 3.5em;
   width: 3.5em;
-  border-radius: 50%;
   margin: auto;
-  background-color: rgb(218, 103, 103);
-   border: solid rgb(231, 17, 17) 1px;
+  background-color: #008000;
+  border-radius: 35px;
+  padding: 0.5em;
+}
+
+.aside-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0em 2em;
+}
+
+.turns-container {
+  display: flex;
 }

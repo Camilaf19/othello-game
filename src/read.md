@@ -38,3 +38,7 @@ class Celda {
   color: string
 }
 */
+
+
+      /*    if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+        let adjacentCell = Board.cells[row][col] } */

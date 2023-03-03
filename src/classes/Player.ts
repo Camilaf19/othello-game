@@ -1,7 +1,12 @@
-export type Player = 'black' | 'white'
 
-export class PlayerToken {
-  constructor(public currentPlayer: Player, public availablePieces: number) {
-    this.availablePieces = 30
+export type Token = 'black' | 'white'
+
+export class Players {
+  remainingTurns: number
+  currentPlayer: number
+  constructor(currentPlayer: number) {
+    this.remainingTurns = 30
+    this.currentPlayer = currentPlayer
   }
 }
+
