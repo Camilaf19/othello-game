@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Token } from './components/Token'
 import { Board } from './classes/board'
 import { Cell } from './classes/cells'
@@ -10,6 +10,11 @@ function App() {
   const [turn, setTurn] = useState(1)
   const [whiteTokens, setWhiteTokens] = useState(30)
   const [blackTokens, setBlackTokens] = useState(30)
+
+  useEffect(() => {
+      setWhiteTokens(32)
+      setBlackTokens(32)
+  }, [])
 
   function handleClickBoard(irow: number, icol: number): void {
     const cell = new Cell(irow, icol, turn)
@@ -34,7 +39,7 @@ function App() {
       setTurn(newTurn)
     }
 
-    if (blackTokens === 1 || whiteTokens === 0) {
+    if (blackTokens === 0 || whiteTokens === 0) {
       //decir quien gano
       alert('ya')
       // setBoard(board)
