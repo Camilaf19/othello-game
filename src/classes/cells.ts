@@ -12,7 +12,7 @@ export class Cell extends Board {
       [1, 0], // abajo
       [0, -1], // izquierda
     ]
-    this.currentPlayer = currentPlayer // turns: 1= black token 2= white token
+    this.currentPlayer = currentPlayer
   }
 
   validateMove(Board: Board) {
@@ -26,18 +26,11 @@ export class Cell extends Board {
       if (row >= 0 && row < 8 && col >= 0 && col < 8) {
         if (Board.cells[row][col] === 3 - this.currentPlayer) {
           // la celda adyacente sea el oponente
-          debugger
           if (Board.cells[this.rows][this.cols] !== this.currentPlayer) {
             this.flippedTokens++
-            Board.cells[this.rows][this.cols] = this.currentPlayer
+            Board.cells[this.rows][this.cols] = this.currentPlayer //pintar el turno actual
           }
-          //pintar el turno actual
-          this.createChain(
-            this.rows,
-            this.cols,
-            direction,
-            this.currentPlayer,
-            Board
+          this.createChain(this.rows, this.cols, direction, this.currentPlayer, Board
           )
         }
       }
@@ -54,14 +47,7 @@ export class Cell extends Board {
   ) {
     let r = row + direction[0] // adyacentes del actual
     let c = col + direction[1]
-    while (
-      r >= 0 &&
-      r < 8 &&
-      c >= 0 &&
-      c < 8 &&
-      Board.cells[r][c] === 3 - currentPlayer
-    ) {
-      debugger
+    while (r >= 0 && r < 8 && c >= 0 && c < 8 && Board.cells[r][c] === 3 - currentPlayer) {
       Board.cells[r][c] = currentPlayer // pinta la celda adaycente del jugador actual
       this.flippedTokens++
       r += direction[0] //cambia a los valores adayacentes de la adyacente
