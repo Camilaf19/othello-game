@@ -3,6 +3,7 @@ import { Token } from './components/Token'
 import { Board } from './classes/board'
 import { Cell } from './classes/cells'
 
+
 function App() {
   const initializeBoard = new Board(8, 8)
   const [board, setBoard] = useState(initializeBoard)
@@ -19,18 +20,19 @@ function App() {
   function handleClickBoard(irow: number, icol: number): void {
     const cell = new Cell(irow, icol, turn)
     let cellValue = cell.validateMove(board)
+    let tokenschanged = cell.flippedTokens
     let changeTurn = false
 
     if ((turn === 1 || turn === 2) && cellValue === 0) {
       setWhiteTokens(whiteTokens)
       setBlackTokens(blackTokens)
     } else if (turn === 1 && blackTokens > 0) {
-      cellValue = 1
-      setBlackTokens(blackTokens - 1)
+      setBlackTokens(blackTokens - tokenschanged)
+      setWhiteTokens(whiteTokens + tokenschanged - 1)
       changeTurn = true
     } else if (turn === 2 && whiteTokens > 0) {
-      cellValue = 2
-      setWhiteTokens(whiteTokens - 1)
+      setWhiteTokens(whiteTokens - tokenschanged )
+      setBlackTokens(blackTokens + tokenschanged - 1)
       changeTurn = true
     }
 
@@ -41,7 +43,7 @@ function App() {
 
     if (blackTokens === 0 || whiteTokens === 0) {
       //decir quien gano
-      alert('ya')
+      alert('game over')
       // setBoard(board)
     }
   }
@@ -92,11 +94,13 @@ function App() {
               isSelected={turn === 2}
             ></Token>
           </article>
-          <article>
-            <h2>Remaining tokens:</h2>
-            <p>Black: {blackTokens}</p>
-            <p>White: {whiteTokens}</p>
+          <article className='tokens-container'>
+            <h2>Black:</h2>
+            <p>{blackTokens}</p>
+            <h2>White:</h2>
+            <p>{whiteTokens}</p>
             <button
+              className='button-start'
               onClick={() => {
                 setBoard(newBoard)
                 setWhiteTokens(30)

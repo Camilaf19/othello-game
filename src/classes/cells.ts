@@ -2,6 +2,7 @@ import { Board } from './board'
 
 export class Cell extends Board {
   neighbors: number[][]
+  flippedTokens: number = 0
 
   constructor(rows: number, cols: number, public currentPlayer: number) {
     super(rows, cols)
@@ -18,15 +19,20 @@ export class Cell extends Board {
     if (Board.cells[this.rows][this.cols] !== 0) {
       return 0
     }
-
     this.neighbors.forEach((direction) => {
       let row = this.rows + direction[0] // posicion adayacentes
       let col = this.cols + direction[1]
 
       if (row >= 0 && row < 8 && col >= 0 && col < 8) {
-        if (Board.cells[row][col] === 3 - this.currentPlayer) {  // la celda adyacente sea el oponente
-          Board.cells[this.rows][this.cols] = this.currentPlayer //pintar el turno actual
-          this.flipTokens(
+        if (Board.cells[row][col] === 3 - this.currentPlayer) {
+          // la celda adyacente sea el oponente
+          debugger
+          if (Board.cells[this.rows][this.cols] !== this.currentPlayer) {
+            this.flippedTokens++
+            Board.cells[this.rows][this.cols] = this.currentPlayer
+          }
+          //pintar el turno actual
+          this.createChain(
             this.rows,
             this.cols,
             direction,
@@ -36,11 +42,10 @@ export class Cell extends Board {
         }
       }
     })
-
     return Board.cells[this.rows][this.cols]
   }
 
-  flipTokens(
+  createChain(
     row: number, // posicion donde jugador quiere poner su ficha
     col: number,
     direction: number[],
@@ -56,7 +61,9 @@ export class Cell extends Board {
       c < 8 &&
       Board.cells[r][c] === 3 - currentPlayer
     ) {
+      debugger
       Board.cells[r][c] = currentPlayer // pinta la celda adaycente del jugador actual
+      this.flippedTokens++
       r += direction[0] //cambia a los valores adayacentes de la adyacente
       c += direction[1]
     }
