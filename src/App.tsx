@@ -45,11 +45,7 @@ function App() {
     setBlackTokens(30)
   }
 
-  if (blackTokens === 0 || whiteTokens === 0) {
-    //decir quien gano
-    alert('game over')
-    // setBoard(board)
-  }
+ 
 
   return (
     <>
@@ -103,6 +99,7 @@ function App() {
           <GameEnd
             whiteTokens={whiteTokens}
             blackTokens={blackTokens}
+            currentPlayer={turn}
           />
         </aside>
       </main>

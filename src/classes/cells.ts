@@ -15,22 +15,29 @@ export class Cell extends Board {
     this.currentPlayer = currentPlayer
   }
 
+ validateLimit(row: number, col: number): boolean {
+    return row >= 0 && row < 8 && col >= 0 && col < 8
+  }
+
   validateMove(Board: Board) {
     if (Board.cells[this.rows][this.cols] !== 0) {
+      //celda ocupada
       return 0
     }
+
     this.neighbors.forEach((direction) => {
       let row = this.rows + direction[0] // posicion adayacentes
       let col = this.cols + direction[1]
-
-      if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+debugger
+      if (this.validateLimit(row, col)) {
         if (Board.cells[row][col] === 3 - this.currentPlayer) {
           // la celda adyacente sea el oponente
-          if (Board.cells[this.rows][this.cols] !== this.currentPlayer) {
-            this.flippedTokens++
-            Board.cells[this.rows][this.cols] = this.currentPlayer //pintar el turno actual
-          }
-          this.createChain(this.rows, this.cols, direction, this.currentPlayer, Board
+          this.createChain(
+            this.rows,
+            this.cols,
+            direction,
+            this.currentPlayer,
+            Board
           )
         }
       }
@@ -39,20 +46,39 @@ export class Cell extends Board {
   }
 
   createChain(
-    row: number, // posicion donde jugador quiere poner su ficha
+    row: number,
     col: number,
     direction: number[],
     currentPlayer: number,
     Board: Board
   ) {
-    debugger
     let r = row + direction[0] // adyacentes del actual
     let c = col + direction[1]
-    while (r >= 0 && r < 8 && c >= 0 && c < 8 && Board.cells[r][c] === 3 - currentPlayer) {
-      Board.cells[r][c] = currentPlayer // pinta la celda adaycente del jugador actual
-      this.flippedTokens++
+    let foundCurrentPlayerToken = false // variable de control
+
+    while (this.validateLimit(r, c) && Board.cells[r][c] === 3 - currentPlayer) {
       r += direction[0] //cambia a los valores adayacentes de la adyacente
       c += direction[1]
+      if (Board.cells[r][c] === currentPlayer) {
+        foundCurrentPlayerToken = true // se encontró una ficha del jugador actual
+        break // se sale del ciclo
+      }
+    }
+
+    // si se encontró una ficha del jugador actual, se actualiza la cadena
+    if (foundCurrentPlayerToken) {
+      r = row + direction[0]
+      c = col + direction[1]
+      if (Board.cells[this.rows][this.cols] !== this.currentPlayer) {
+        this.flippedTokens++
+        Board.cells[this.rows][this.cols] = this.currentPlayer //pintar el turno actual
+      }
+      while (this.validateLimit(r, c) && Board.cells[r][c] === 3 - currentPlayer ) {
+        Board.cells[r][c] = currentPlayer // pinta la celda posicion nueva
+        this.flippedTokens++
+        r += direction[0] //cambia a los valores adayacentes de la adyacente
+        c += direction[1]
+      }
     }
   }
 }
