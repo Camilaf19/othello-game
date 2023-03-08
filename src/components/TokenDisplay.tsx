@@ -3,7 +3,7 @@ interface myProps {
   className: string
 }
 
-export const Token = ({ isSelected, className: classname }: myProps) => {
+export const TokenDisplay = ({ isSelected, className: classname }: myProps) => {
   const classNameSelected = isSelected ? 'token-selected' : 'token-container'
   return (
     <>

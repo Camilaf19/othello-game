@@ -45,6 +45,7 @@ export class Cell extends Board {
     currentPlayer: number,
     Board: Board
   ) {
+    debugger
     let r = row + direction[0] // adyacentes del actual
     let c = col + direction[1]
     while (r >= 0 && r < 8 && c >= 0 && c < 8 && Board.cells[r][c] === 3 - currentPlayer) {

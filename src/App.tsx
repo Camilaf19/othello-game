@@ -1,51 +1,54 @@
 import { useState } from 'react'
 import { PlayerStats } from './components/PlayerStats'
-import { Token } from './components/TokenDisplay'
+import { TokenDisplay } from './components/TokenDisplay'
+import { GameEnd } from './components/GameEnd'
 import { Board } from './classes/board'
 import { Cell } from './classes/cells'
 
 function App() {
-  const initializeBoard = new Board(8, 8)
-  const [board, setBoard] = useState(initializeBoard)
+  const initialBoard = new Board(8, 8)
+  const [board, setBoard] = useState(initialBoard)
   const newBoard = board.initBoard()
   const [turn, setTurn] = useState(1)
   const [whiteTokens, setWhiteTokens] = useState(32)
   const [blackTokens, setBlackTokens] = useState(32)
 
   function handleClickBoard(irow: number, icol: number) {
-    const cellClass = new Cell(irow, icol, turn)
-    const cellValue = cellClass.validateMove(board)
-    const tokensChanged = cellClass.flippedTokens
-    let changeTurn = false
+    const selectedCell = new Cell(irow, icol, turn)
+    const cellValue = selectedCell.validateMove(board)
+    const tokensChanged = selectedCell.flippedTokens
 
-    if ((turn === 1 || turn === 2) && cellValue === 0) {
+    const validMovements: Record<number, () => void> = {
+      1: () => {
+        setBlackTokens((prevBlackTokens) => prevBlackTokens - tokensChanged)
+        setWhiteTokens((prevWhiteTokens) => prevWhiteTokens + tokensChanged - 1)
+        setTurn(2)
+      },
+      2: () => {
+        setWhiteTokens((prevWhiteTokens) => prevWhiteTokens - tokensChanged)
+        setBlackTokens((prevBlackTokens) => prevBlackTokens + tokensChanged - 1)
+        setTurn(1)
+      },
+    }
+
+    if (cellValue === 0) {
       setWhiteTokens(whiteTokens)
       setBlackTokens(blackTokens)
-    } else if (turn === 1) {
-      setBlackTokens((prevBlackTokens) => prevBlackTokens - tokensChanged)
-      setWhiteTokens((prevWhiteTokens) => prevWhiteTokens + tokensChanged - 1)
-      changeTurn = true
-    } else if (turn === 2) {
-      setWhiteTokens((prevWhiteTokens) => prevWhiteTokens - tokensChanged)
-      setBlackTokens((prevBlackTokens) => prevBlackTokens - tokensChanged - 1)
-      changeTurn = true
+    } else {
+      validMovements[turn]()
     }
-    if (changeTurn) {
-    const newTurn = turn === 1 ? 2 : 1
-    setTurn(newTurn)
-    }
-  }
-
-  if (blackTokens === 0 || whiteTokens === 0) {
-    //decir quien gano
-    alert('game over')
-    // setBoard(board)
   }
 
   function handleRestartGame() {
     setBoard(newBoard)
     setWhiteTokens(30)
     setBlackTokens(30)
+  }
+
+  if (blackTokens === 0 || whiteTokens === 0) {
+    //decir quien gano
+    alert('game over')
+    // setBoard(board)
   }
 
   return (
@@ -83,11 +86,11 @@ function App() {
         </section>
         <aside className='aside-container'>
           <section className='turns-container'>
-            <Token
+            <TokenDisplay
               className='token-black'
               isSelected={turn === 1}
             />
-            <Token
+            <TokenDisplay
               className='token-white'
               isSelected={turn === 2}
             />
@@ -96,6 +99,10 @@ function App() {
             whiteTokens={whiteTokens}
             blackTokens={blackTokens}
             handleRestartGame={handleRestartGame}
+          />
+          <GameEnd
+            whiteTokens={whiteTokens}
+            blackTokens={blackTokens}
           />
         </aside>
       </main>

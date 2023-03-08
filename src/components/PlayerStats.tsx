@@ -6,7 +6,7 @@ interface myProps {
 
 export const PlayerStats = ({ blackTokens, whiteTokens, handleRestartGame }: myProps) => {
     return (
-      <>
+        <>
         <section className='tokens-container'>
           <article className='count-tokens'>
             <p>{blackTokens}</p>
